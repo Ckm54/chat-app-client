@@ -113,6 +113,7 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
       <div className="flex-1 overflow-auto">
         <ChatsView
           currentUser={currentUser}
+          currentChat={currentChat}
           chatMessages={chatMessages}
           isLoading={loadingMessages}
         />

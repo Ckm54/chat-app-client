@@ -33,6 +33,7 @@ const UserList = ({
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-x-4 px-4 py-6">
+        <div className="text-3xl">🫂</div>
         <h2 className="text-white">ChatApp</h2>
       </div>
       <Separator />

@@ -7,6 +7,7 @@ import { Loader, LogOut, MoreVertical } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "@/ui/button";
 import { useNavigate } from "react-router-dom";
+import socketContext from "@/contexts/Socket/socket.context";
 
 interface UserListProps {
   users: IUser[];
@@ -22,6 +23,8 @@ const UserList = ({
 }: UserListProps) => {
   const [currentChat, setCurrentChat] = React.useState<string>();
   const navigate = useNavigate();
+  const { socket } = React.useContext(socketContext).socketState;
+  const { socketDispatch } = React.useContext(socketContext);
 
   const switchChat = ({ id, user }: { id: string; user: IUser }) => {
     setCurrentChat(id);
@@ -96,6 +99,11 @@ const UserList = ({
               className="flex gap-x-2"
               onClick={() => {
                 logoutUser();
+                socket?.on("user_disconnected", (uid: string) => {
+                  console.log("user disconnected");
+                  socketDispatch({ type: "remove_user", payload: uid });
+                });
+                socket?.off();
                 navigate("/", { replace: true });
               }}
             >

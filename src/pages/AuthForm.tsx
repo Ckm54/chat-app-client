@@ -1,9 +1,20 @@
 import React from "react";
 import LoginForm from "./auth/Login";
 import SignupForm from "./auth/Signup";
+import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
   const [isLogin, setisLogin] = React.useState(true);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      navigate("/chat", { replace: true });
+      return;
+    }
+  });
 
   return (
     <div className="gap-y-4 flex flex-col">

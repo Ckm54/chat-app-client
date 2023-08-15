@@ -1,11 +1,13 @@
-import { IAuthUser, IChatMessage, IUser } from "@/types/typings";
-import ChatHeader from "./chat/ChatHeader";
-import ChatsView from "./chat/ChatsView";
-import ChatInputForm from "./chat/ChatInputForm";
-import { toast } from "react-hot-toast";
-import axios from "axios";
+import socketContext from "@/contexts/Socket/socket.context";
 import { BASE_API_URL } from "@/lib/constants";
+import { IAuthUser, IChatMessage, IUser } from "@/types/typings";
+import axios from "axios";
 import React from "react";
+import { toast } from "react-hot-toast";
+import { v4 as uuidV4 } from "uuid";
+import ChatHeader from "./chat/ChatHeader";
+import ChatInputForm from "./chat/ChatInputForm";
+import ChatsView from "./chat/ChatsView";
 
 interface ChatContainerProps {
   currentUser: IAuthUser;
@@ -17,7 +19,12 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
   const [loadingMessages, setLoadingMessages] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [receivedMessage, setReceivedMessage] =
+    React.useState<IChatMessage | null>(null);
   const [chatMessages, setChatMessages] = React.useState<IChatMessage[]>([]);
+  const { socketDispatch } = React.useContext(socketContext);
+
+  const { socket, messages } = React.useContext(socketContext).socketState;
 
   // fetch this chat's messages when this container loads
   React.useEffect(() => {
@@ -48,6 +55,24 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
     fetchMessages();
   }, [currentChat, currentUser]);
 
+  React.useEffect(() => {
+    if (socket) {
+      socket.on("message-received", (message) => {
+        console.log("message received...");
+        setReceivedMessage({ fromSelf: false, message, _id: uuidV4() });
+      });
+    }
+  }, [socket]);
+
+  // when message arrives run this
+  React.useEffect(() => {
+    receivedMessage && setChatMessages((prev) => [...prev, receivedMessage]);
+  }, [receivedMessage]);
+
+  React.useEffect(() => {
+    messages && setChatMessages(messages);
+  }, [messages]);
+
   const handleSendMessage = async (message: string) => {
     setIsLoading(true);
     try {
@@ -61,7 +86,17 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
         requestData
       );
 
+      // emit message send event
+      // socket?.emit("send-message", requestData);
+
       console.log(response);
+
+      const messages = [...chatMessages];
+      messages.push({ fromSelf: true, message, _id: uuidV4() });
+      setChatMessages(messages);
+
+      socketDispatch({ type: "send-message", payload: chatMessages });
+      socket?.emit("send-message", requestData);
       toast.success("message sent");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

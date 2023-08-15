@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { IAuthUser, IChatMessage } from "@/types/typings";
 import { Loader } from "lucide-react";
+import React from "react";
 
 interface ChatsViewProps {
   currentUser: IAuthUser;
@@ -13,6 +14,13 @@ const ChatsView = ({
   chatMessages,
   isLoading,
 }: ChatsViewProps) => {
+  const scrollRef: React.LegacyRef<HTMLDivElement | undefined> = React.useRef();
+
+  // scroll messsages on overflow
+  React.useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
+
   return (
     <div className="relative h-full">
       {isLoading ? (
@@ -25,6 +33,7 @@ const ChatsView = ({
           {chatMessages.map((message, index) => (
             <div
               key={index}
+              ref={scrollRef}
               className={cn(
                 message.fromSelf
                   ? "ml-auto bg-[#4f04]"

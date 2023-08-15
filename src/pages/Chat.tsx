@@ -1,18 +1,21 @@
-import UserList from "@/components/UserList";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { BASE_API_URL } from "@/lib/constants";
-import { IAuthUser, IUser } from "@/types/typings";
 import ChatContainer from "@/components/ChatContainer";
 import ChatWelcomeScreen from "@/components/ChatWelcomeScreen";
+import UserList from "@/components/UserList";
+import socketContext from "@/contexts/Socket/socket.context";
+import { BASE_API_URL } from "@/lib/constants";
+import { IAuthUser, IUser } from "@/types/typings";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState<IAuthUser>();
   const [currentChat, setCurrentChat] = React.useState<IUser>();
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const { socketDispatch } = React.useContext(socketContext);
 
   const [users, setUsers] = React.useState<IUser[]>([]);
   // on launch first try getting logged in user from localstorage
@@ -28,6 +31,12 @@ const ChatPage = () => {
     setCurrentUser(jwt_decode(user));
     // setUser(JSON.parse(user));
   }, [navigate]);
+
+  React.useEffect(() => {
+    if (currentUser) {
+      socketDispatch({ type: "add-user", payload: currentUser._id });
+    }
+  }, [currentUser]);
 
   // fetch all registered users
   React.useEffect(() => {

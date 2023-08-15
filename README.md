@@ -2,6 +2,9 @@
 
 A real-time chat application built using React, TypeScript, Node.js, MongoDB, and Socket.io. Users can create accounts, log in, start conversations, log out, and find have all their chats persisted in a mmongodb database.
 
+### Backend repo:
+[Chat app backend](https://github.com/Ckm54/chat-backend)
+
 ## Screenshot
 
 ![Screenshot](/public/images/chats.png)

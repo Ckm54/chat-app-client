@@ -10,3 +10,9 @@ export interface IUser {
   fullName: string;
   username: string;
 }
+
+export interface IChatMessage {
+  _id: string;
+  fromSelf: boolean;
+  message: string;
+}

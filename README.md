@@ -1,27 +1,89 @@
-# React + TypeScript + Vite
+# Chat App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time chat application built using React, TypeScript, Node.js, MongoDB, and Socket.io. Users can create accounts, log in, start conversations, log out, and find have all their chats persisted in a mmongodb database.
 
-Currently, two official plugins are available:
+## Screenshot
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Screenshot](/public/images/chats.png)
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- User Authentication:
+  
+     - Users can create accounts, log in, and log out.
+- Real-Time Chat:
+  
+     - Users can start conversations and exchange messages in real-time using Socket.io.
+- Data Persistence:
+  
+     - All chats are stored in a MongoDB database, ensuring conversations are intact even after logging out.
+- React and TypeScript:
+  
+     - The frontend is built with React and TypeScript for type safety and maintainability.
+- Node.js Backend:
+  
+     - The backend server is built using Node.js, providing a foundation for handling user authentication and real-time messaging as well as type safety with typescript.
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
+Prerequisites
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+    Node.js and npm installed on your machine.
+    A MongoDB database instance for storing user accounts and chat messages.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Installation
+
+    Clone the repository:
+
+    bash
+
+git clone https://github.com/Ckm54/chat-app-client.git
+
+Navigate to the project directory:
+
+bash
+
+cd chat-app-client
+
+Install dependencies for both the server and the client:
+
+bash
+   yarn
+
+Set up environment variables:
+
+    Rename .env.example in the root directory to .env and fill in the required values.
+
+Start the client:
+
+bash
+
+    # In the root directory
+    yarn dev
+
+    Open your browser and go to http://localhost:5173 to use the app.
+
+## Technologies Used
+
+    React
+    TypeScript
+    Node.js
+    Express.js
+    MongoDB
+    Socket.io
+    HTML5, CSS3
+    Tailwindcss
+
+## Future Enhancements
+
+    Group chat functionality
+    Message history and pagination
+    Profile pictures and user profiles
+    Emojis and file sharing
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues and pull requests.
+
+## License
+
+This project is licensed under the MIT License.

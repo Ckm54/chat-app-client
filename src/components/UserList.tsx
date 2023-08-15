@@ -2,8 +2,11 @@ import { IAuthUser, IUser } from "@/types/typings";
 import React from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Separator } from "./ui/separator";
-import { cn } from "@/lib/utils";
-import { Loader } from "lucide-react";
+import { cn, logoutUser } from "@/lib/utils";
+import { Loader, LogOut, MoreVertical } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "@/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface UserListProps {
   users: IUser[];
@@ -18,6 +21,7 @@ const UserList = ({
   loading,
 }: UserListProps) => {
   const [currentChat, setCurrentChat] = React.useState<string>();
+  const navigate = useNavigate();
 
   const switchChat = ({ id, user }: { id: string; user: IUser }) => {
     setCurrentChat(id);
@@ -25,7 +29,7 @@ const UserList = ({
   };
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-x-4 p-4">
+      <div className="flex items-center gap-x-4 px-4 py-6">
         <h2 className="text-white">ChatApp</h2>
       </div>
       <Separator />
@@ -40,7 +44,7 @@ const UserList = ({
       >
         <>
           {loading ? (
-            <div className="absolute w-full h-full flex items-center justify-center top-0 bg-black/25">
+            <div className="absolute w-full h-full flex flex-col items-center justify-center top-0 bg-black/25">
               <Loader className="w-8 h-8 animate-spin text-white" />
               <p className="text-neutral-200 italic">Loading chats...</p>
             </div>
@@ -70,15 +74,35 @@ const UserList = ({
 
       <Separator />
       {/* render current user at bottom */}
-      <div className="p-4 flex items-center gap-x-4">
-        <Avatar>
-          <AvatarFallback className="bg-green-600 text-white text-xl font-semibold">
-            {currentUser.username[0].toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <h3 className="text-white">
-          Logged in as: <span>{currentUser.username}</span>
-        </h3>
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center gap-x-4">
+          <Avatar>
+            <AvatarFallback className="bg-green-600 text-white text-xl font-semibold">
+              {currentUser.username[0].toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <h3 className="text-white">
+            Logged in as:{" "}
+            <span className="italic">@{currentUser.username}</span>
+          </h3>
+        </div>
+        <Popover>
+          <PopoverTrigger className="bg-gray-600 rounded-full p-2 hover:bg-gray-700 transition">
+            <MoreVertical className="h-6 w-6 text-white" />
+          </PopoverTrigger>
+          <PopoverContent className="max-w-min p-0">
+            <Button
+              variant={"destructive"}
+              className="flex gap-x-2"
+              onClick={() => {
+                logoutUser();
+                navigate("/", { replace: true });
+              }}
+            >
+              Logout <LogOut className="w-4 h-4" />
+            </Button>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

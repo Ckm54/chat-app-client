@@ -59,7 +59,7 @@ const UserList = ({
                   key={user._id}
                   className={cn(
                     currentChat === user._id && "bg-blue-500",
-                    "flex items-start gap-x-4 rounded-md hover:bg-blue-600 p-4 cursor-pointer transition-colors duration-150"
+                    "flex items-center gap-x-4 rounded-md hover:bg-blue-600 p-4 cursor-pointer transition-colors duration-150"
                   )}
                   onClick={() => switchChat({ id: user._id, user })}
                 >
@@ -68,7 +68,7 @@ const UserList = ({
                       {user.username[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <h3 className="text-neutral-200">{user.username}</h3>
+                  <h3 className="text-neutral-200 text-lg">{user.username}</h3>
                 </div>
               ))}
             </>

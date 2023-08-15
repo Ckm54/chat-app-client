@@ -106,7 +106,7 @@ const SignupForm = () => {
       // navigate user to the chat page
       // delay of 1 second for toast to shows
       setTimeout(() => {
-        navigate("/chat");
+        navigate("/chat", { replace: true });
       }, 1000);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

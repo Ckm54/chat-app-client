@@ -54,6 +54,9 @@ const UserList = ({
             </div>
           ) : (
             <>
+              <h3 className="text-left text-gray-200">
+                All users: {users.length}
+              </h3>
               {users.map((user) => (
                 <div
                   key={user._id}

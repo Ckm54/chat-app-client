@@ -73,7 +73,7 @@ const ChatPage = () => {
   };
   return (
     <div className="relative w-full min-h-screen flex flex-col justify-center gap-y-2 items-center bg-[#131324]">
-      <div className="w-full lg:w-[85vw] h-screen lg:h-[85vh] bg-[#000076] grid grid-cols-4">
+      <div className="w-full lg:w-[85vw] h-screen lg:h-[85vh] bg-[#000076c7] grid grid-cols-4">
         {/* user list view */}
         <div className="col-span-1 overflow-hidden border-r">
           <UserList

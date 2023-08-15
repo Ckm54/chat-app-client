@@ -11,6 +11,19 @@ import {
 } from "../../ui/form";
 import { Input } from "../../ui/input";
 import * as z from "zod";
+import React from "react";
+import { Loader } from "lucide-react";
+import axios from "axios";
+import { BASE_API_URL } from "@/lib/constants";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+interface IRegisterData {
+  fullName: string;
+  email: string;
+  password: string;
+  username: string;
+}
 
 const signupFormSchema = z
   .object({
@@ -34,22 +47,80 @@ const signupFormSchema = z
   });
 
 const SignupForm = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const navigate = useNavigate();
+
   // define form
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
+      fullName: "",
+      email: "",
       username: "",
       password: "",
+      passwordConfirm: "",
     },
   });
 
+  form.formState.isValid &&
+    form.register("passwordConfirm", {
+      validate: (value) => {
+        if (value !== form.getValues("password")) {
+          return "passwords do not match";
+        }
+        return true;
+      },
+    });
+
   // login handler
-  const loginHandler = (values: z.infer<typeof signupFormSchema>) => {
+  const loginHandler = async (values: z.infer<typeof signupFormSchema>) => {
+    setError(false);
+    setErrorMessage("");
     // todo:: add api call to login endpoint
-    console.log(values);
+    try {
+      setIsLoading(true);
+      const registerData: IRegisterData = {
+        username: values.username,
+        password: values.password,
+        email: values.email,
+        fullName: values.fullName,
+      };
+
+      const response = await axios.post(
+        `${BASE_API_URL}/auth/register`,
+        registerData
+      );
+
+      if (response.status !== 200) {
+        setError(true);
+        setErrorMessage(response.data.message);
+      }
+      console.log({ response });
+
+      toast.success("Signup successful");
+      // store user in localstorage
+      localStorage.setItem("user", response.data.token);
+
+      // navigate user to the chat page
+      // delay of 1 second for toast to shows
+      setTimeout(() => {
+        navigate("/chat");
+      }, 1000);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setErrorMessage(error.response.data.message);
+      console.log({ error });
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <Form {...form}>
+      {error && <p className="text-sm text-red-500">{errorMessage}</p>}
       <form onSubmit={form.handleSubmit(loginHandler)} className="space-y-6">
         <FormField
           control={form.control}
@@ -121,7 +192,13 @@ const SignupForm = () => {
           )}
         />
 
-        <Button type="submit">Login</Button>
+        <Button
+          type="submit"
+          className="w-full flex items-center justify-center"
+        >
+          Register{" "}
+          {isLoading && <Loader className="w-4 h-4 animate-spin ml-4" />}
+        </Button>
       </form>
     </Form>
   );

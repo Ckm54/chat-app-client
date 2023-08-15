@@ -17,7 +17,7 @@ const AuthForm = () => {
           className="text-blue-500 underline underline-offset-4 hover:text-blue-600 transition cursor-pointer"
           onClick={() => setisLogin(!isLogin)}
         >
-          {isLogin ? "Signup" : "Register"}
+          {isLogin ? "Signup" : "Login"}
         </span>
       </p>
     </div>

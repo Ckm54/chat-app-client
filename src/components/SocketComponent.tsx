@@ -19,7 +19,7 @@ const SocketComponent = ({ children }: ISocketComponentProps) => {
 
   const user = localStorage.getItem("user");
   const socket = useSocket({
-    uri: "ws://localhost:8000",
+    uri: `ws://${import.meta.env.VITE_WEBSOCKET_ENDPOINT}`,
     opts: {
       reconnectionAttempts: 5,
       reconnectionDelay: 5000,

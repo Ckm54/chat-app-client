@@ -18,22 +18,24 @@ export const SocketReducer = (
   state: ISocketContextState,
   action: ISocketContextActions
 ) => {
-  console.log(
-    `Message received - Action ${action.type} payload: ${action.payload}`
-  );
-
   switch (action.type) {
     case "add-user":
       return { ...state, users: state.users.push(action.payload as string) };
-    case "send-message":
-      return {
-        ...state,
-        messsages: action.payload as unknown as IChatMessage[],
-      };
-    case "message-received":
+    case "set-messages":
       return {
         ...state,
         messages: action.payload as unknown as IChatMessage[],
+      };
+    case "send-message":
+      return {
+        ...state,
+        messsages: [...state.messages, action.payload],
+      };
+    case "message-received":
+      console.log(action.payload);
+      return {
+        ...state,
+        messages: [...state.messages, action.payload],
       };
     case "update_socket":
       return { ...state, socket: action.payload as Socket };

@@ -34,10 +34,16 @@ export type TSocketContextActions =
   | "remove_user"
   | "send-message"
   | "add-user"
+  | "set-messages"
   | "message-received"
   | "update_socket";
 
-export type TSocketContextPayload = string | string[] | Socket | IChatMessage[];
+export type TSocketContextPayload =
+  | string
+  | string[]
+  | Socket
+  | IChatMessage[]
+  | IChatMessage;
 
 export interface ISocketContextActions {
   type: TSocketContextActions;

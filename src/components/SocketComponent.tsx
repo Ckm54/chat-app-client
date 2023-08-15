@@ -40,23 +40,21 @@ const SocketComponent = ({ children }: ISocketComponentProps) => {
 
   const startListeners = () => {
     // user connected
-    socket.on("user_connected", (users: string[]) => {
-      console.log("User connected");
-      socketDispatch({ type: "update_users", payload: users });
-    });
+    // socket.on("user_connected", (users: string[]) => {
+    //   console.log("User connected");
+    //   socketDispatch({ type: "update_users", payload: users });
+    // });
 
-    socket.on("user_disconnected", (uid: string) => {
-      console.log("user disconnected");
-      socketDispatch({ type: "remove_user", payload: uid });
-    });
+    // socket.on("user_disconnected", (uid: string) => {
+    //   console.log("user disconnected");
+    //   socketDispatch({ type: "remove_user", payload: uid });
+    // });
 
     socket.on("send-message", (message) => {
-      console.log("sending", message);
       socketDispatch({ type: "send-message", payload: message });
     });
 
     socket.on("message-received", (message) => {
-      console.log("receiving", message);
       socketDispatch({ type: "message-received", payload: message });
     });
     // reconnect

@@ -24,7 +24,7 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
   const [chatMessages, setChatMessages] = React.useState<IChatMessage[]>([]);
   const { socketDispatch } = React.useContext(socketContext);
 
-  const { socket, messages } = React.useContext(socketContext).socketState;
+  const { socket } = React.useContext(socketContext).socketState;
 
   // fetch this chat's messages when this container loads
   React.useEffect(() => {
@@ -58,20 +58,23 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
   React.useEffect(() => {
     if (socket) {
       socket.on("message-received", (message) => {
-        console.log("message received...");
-        setReceivedMessage({ fromSelf: false, message, _id: uuidV4() });
+        const data = {
+          fromSelf: false,
+          message: message.message,
+          _id: uuidV4(),
+        };
+        setReceivedMessage(data);
       });
     }
   }, [socket]);
 
   // when message arrives run this
   React.useEffect(() => {
-    receivedMessage && setChatMessages((prev) => [...prev, receivedMessage]);
+    // receivedMessage && setChatMessages((prev) => [...prev, receivedMessage]);
+    if (receivedMessage) {
+      setChatMessages((prev) => [...prev, receivedMessage]);
+    }
   }, [receivedMessage]);
-
-  React.useEffect(() => {
-    messages && setChatMessages(messages);
-  }, [messages]);
 
   const handleSendMessage = async (message: string) => {
     setIsLoading(true);

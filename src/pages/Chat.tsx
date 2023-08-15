@@ -15,7 +15,9 @@ const ChatPage = () => {
   const [currentChat, setCurrentChat] = React.useState<IUser>();
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const { socketDispatch } = React.useContext(socketContext);
+  const { socketState, socketDispatch } = React.useContext(socketContext);
+
+  const socket = socketState.socket;
 
   const [users, setUsers] = React.useState<IUser[]>([]);
   // on launch first try getting logged in user from localstorage
@@ -35,8 +37,9 @@ const ChatPage = () => {
   React.useEffect(() => {
     if (currentUser) {
       socketDispatch({ type: "add-user", payload: currentUser._id });
+      socket?.emit("add-user", currentUser._id);
     }
-  }, [currentUser]);
+  }, [currentUser, socketDispatch]);
 
   // fetch all registered users
   React.useEffect(() => {

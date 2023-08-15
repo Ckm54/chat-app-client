@@ -33,6 +33,8 @@ const ChatsView = ({
           {chatMessages.map((message, index) => (
             <div
               key={index}
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               ref={scrollRef}
               className={cn(
                 message.fromSelf

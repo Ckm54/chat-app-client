@@ -84,15 +84,6 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
         to: currentChat._id,
         message,
       };
-      const response = await axios.post(
-        `${BASE_API_URL}/messages/addmsg`,
-        requestData
-      );
-
-      // emit message send event
-      // socket?.emit("send-message", requestData);
-
-      console.log(response);
 
       const messages = [...chatMessages];
       messages.push({ fromSelf: true, message, _id: uuidV4() });
@@ -100,6 +91,9 @@ const ChatContainer = ({ currentUser, currentChat }: ChatContainerProps) => {
 
       socketDispatch({ type: "send-message", payload: chatMessages });
       socket?.emit("send-message", requestData);
+
+      await axios.post(`${BASE_API_URL}/messages/addmsg`, requestData);
+
       toast.success("message sent");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

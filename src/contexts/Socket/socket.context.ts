@@ -20,7 +20,7 @@ export const SocketReducer = (
 ) => {
   switch (action.type) {
     case "add-user":
-      return { ...state, users: state.users.push(action.payload as string) };
+      return { ...state, users: [...state.users, action.payload] };
     case "set-messages":
       return {
         ...state,

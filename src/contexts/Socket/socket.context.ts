@@ -60,6 +60,7 @@ const socketContext = React.createContext<ISocketContextProps>({
   socketDispatch: () => {},
 });
 
+// export socket consumers
 export const SocketContextConsumer = socketContext.Consumer;
 export const SocketContextProvider = socketContext.Provider;
 
